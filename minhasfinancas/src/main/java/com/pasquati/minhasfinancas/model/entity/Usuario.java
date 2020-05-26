@@ -1,6 +1,5 @@
 package com.pasquati.minhasfinancas.model.entity;
 
-import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
@@ -8,25 +7,21 @@ import java.io.Serializable;
 import java.util.Objects;
 
 @Entity
-@Table(name = "usuario", schema = "financas") //O banco de dados Postgres exige o schema
+
 
 public class Usuario implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private Long id;
-    @Column(name = "nome")
-    @Nullable
     private String nome;
-
     private String email;
     private String senha;
 
     public Usuario() {
     }
 
-    public Usuario(Long id, @Nullable String nome, String email, String senha) {
+    public Usuario(Long id,String nome, String email, String senha) {
         this.id = id;
         this.nome = nome;
         this.email = email;
@@ -46,7 +41,7 @@ public class Usuario implements Serializable {
         return nome;
     }
 
-    public void setNome(@Nullable String nome) {
+    public void setNome(String nome) {
         this.nome = nome;
     }
 

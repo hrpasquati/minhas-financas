@@ -17,25 +17,22 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    public UsuarioServiceImpl(UsuarioRepository usuarioRepository){
-        this.usuarioRepository = usuarioRepository;
-    }
 
     @Override
     public Usuario autentica(String email, String senha) {
-       Optional<Usuario> usuario = usuarioRepository.findByEmail(email);
-        if (!usuario.isPresent()){
+        Optional<Usuario> usuario = usuarioRepository.findByEmail(email);
+        if (!usuario.isPresent()) {
             throw new ErroAutenticacao("Usuario não encontrado para o email informado");
         }
-        if (usuario.get().getSenha().equals(senha)){
+        if (usuario.get().getSenha().equals(senha)) {
             throw new ErroAutenticacao("Senha inválida");
         }
-        return usuario.get()    ;
+        return usuario.get();
     }
 
     @Override
-    @Transactional //ele cria uma transacao no banco de dados
-    public Usuario salvarUsuario(Usuario usuario) {
+    @Transactional
+    public Usuario insert(Usuario usuario) {
         validarEmail(usuario.getEmail());
         return usuarioRepository.save(usuario);
     }
@@ -43,9 +40,16 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Override
     public void validarEmail(String email) {
         boolean existe = usuarioRepository.existsByEmail(email);
-        if (existe){
-            throw new RegraNegocioException("Já existe um usuario cadastro com esse e-mail.");
+        if (existe) {
+            throw new RegraNegocioException("Já existe um usuário cadastro com esse e-mail.");
         }
 
     }
+
+    public Usuario findById(Long id) {
+        Optional<Usuario> usuario = usuarioRepository.findById(id);
+        return usuario.orElse(null);
+    }
+
+
 }
