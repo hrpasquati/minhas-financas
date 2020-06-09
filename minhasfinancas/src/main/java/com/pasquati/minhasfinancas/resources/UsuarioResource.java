@@ -11,6 +11,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
+import java.util.Optional;
+
 @RestController
 @RequestMapping(value = "/usuarios")
 public class UsuarioResource {
@@ -54,4 +57,17 @@ public class UsuarioResource {
         Usuario usuario = usuarioService.findById(id);
         return ResponseEntity.ok(usuario);
     }
+
+    @GetMapping(value = "/{id}/saldo")
+    public ResponseEntity obterSaldo(@PathVariable Long id) {
+        Usuario usuario = usuarioService.findById(id);
+        if (usuario == null){
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
+        BigDecimal saldo = lancamentoService. obterSaldoPorUsuario(id);
+        return ResponseEntity.ok(saldo);
+    }
+
+
+
 }

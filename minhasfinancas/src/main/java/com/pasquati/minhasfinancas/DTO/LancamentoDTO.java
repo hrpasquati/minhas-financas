@@ -9,6 +9,7 @@ public class LancamentoDTO implements Serializable {
     private String descricao;
     private Integer mes;
     private Integer ano;
+    
     private BigDecimal valaor;
     private Long usuario;
     private String tipo;

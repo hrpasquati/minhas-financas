@@ -31,6 +31,7 @@ public class LancamentoServiceImpl implements LancamentoService {
 
 
     @Override
+    @Transactional
     public Lancamento salvar(Lancamento lancamento) {
         validar(lancamento);
         lancamento.setStatusLancamento(StatusLancamento.PENDENTES);
@@ -38,6 +39,7 @@ public class LancamentoServiceImpl implements LancamentoService {
     }
 
     @Override
+    @Transactional
     public Lancamento atualizar(Lancamento lancamento) {
         validar(lancamento);
         Objects.requireNonNull(lancamento.getId());
@@ -45,6 +47,7 @@ public class LancamentoServiceImpl implements LancamentoService {
     }
 
     @Override
+    @Transactional
     public void deletar(Lancamento lancamento) {
         Objects.requireNonNull(lancamento.getId());
         lancamentoRepository.delete(lancamento);
@@ -92,7 +95,7 @@ public class LancamentoServiceImpl implements LancamentoService {
             throw new RegraNegocioException("Informe um valor válido");
         }
 
-        if (lancamento.getTipoLancamento() == null) {
+        if (lancamento.getTipo() == null) {
             throw new RegraNegocioException("Informe um tipo de Lancamento");
         }
     }
@@ -108,17 +111,35 @@ public class LancamentoServiceImpl implements LancamentoService {
         Usuario usuario = usuarioService.findById(lancamentoDTO.getUsuario());
 
         lancamento.setUsuario(usuario);
-        lancamento.setTipoLancamento(TipoLancamento.valueOf(lancamentoDTO.getTipo()));
-        lancamento.setStatusLancamento(StatusLancamento.valueOf(lancamentoDTO.getStatus()));
+        if (lancamentoDTO.getUsuario() == null) {
+            lancamento.setTipo(TipoLancamento.valueOf(lancamentoDTO.getTipo()));
+        }
+        if (lancamentoDTO.getStatus() == null) {
+            lancamento.setStatusLancamento(StatusLancamento.valueOf(lancamentoDTO.getStatus()));
+        }
 
         return lancamento;
     }
 
     @Override
     public Optional<Lancamento> findById(Long id) {
-        Optional<Lancamento> findId = lancamentoRepository.findById(id);
-        return findId;
+        return lancamentoRepository.findById(id);
     }
 
+    @Override
+    public BigDecimal obterSaldoPorUsuario(Long id) {
+        BigDecimal receita = lancamentoRepository.obterSaldoPorTipoLancamentoEUsuario(id, TipoLancamento.RECEITA);
+        BigDecimal despesa = lancamentoRepository.obterSaldoPorTipoLancamentoEUsuario(id, TipoLancamento.DESPESA);
+
+        if (receita == null){
+            receita = BigDecimal.ZERO;
+        }
+
+        if (despesa == null) {
+            despesa = BigDecimal.ZERO;
+        }
+
+        return receita.subtract(despesa);
+    }
 
 }

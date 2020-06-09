@@ -11,40 +11,31 @@ import java.time.LocalDate;
 import java.util.Objects;
 
 @Entity
-
 public class Lancamento implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-
     private Long id;
-
     private String descricao;
     private Integer mes;
-
     private Integer ano;
 
     @ManyToOne
     @JoinColumn(name = "id_usuario")
     private Usuario usuario;
-
     private BigDecimal valor;
-
-
     @Convert(converter = Jsr310JpaConverters.LocalDateConverter.class)
     private LocalDate dataCadastro;
-
     @Enumerated(value = EnumType.STRING)
-    private TipoLancamento tipoLancamento;
-
-
+    @Column(name = "tipo")
+    private TipoLancamento tipo;
     @Enumerated(value = EnumType.STRING)
     private StatusLancamento statusLancamento;
 
     public Lancamento() {
             }
 
-    public Lancamento(Long id, String descricao, Integer mes, Integer ano, Usuario usuario, BigDecimal valor, LocalDate dataCadastro, TipoLancamento tipoLancamento, StatusLancamento statusLancamento) {
+    public Lancamento(Long id, String descricao, Integer mes, Integer ano, Usuario usuario, BigDecimal valor, LocalDate dataCadastro, TipoLancamento tipo, StatusLancamento statusLancamento) {
         this.id = id;
         this.descricao = descricao;
         this.mes = mes;
@@ -52,7 +43,7 @@ public class Lancamento implements Serializable {
         this.usuario = usuario;
         this.valor = valor;
         this.dataCadastro = dataCadastro;
-        this.tipoLancamento = tipoLancamento;
+        this.tipo = tipo;
         this.statusLancamento = statusLancamento;
     }
 
@@ -112,12 +103,12 @@ public class Lancamento implements Serializable {
         this.dataCadastro = dataCadastro;
     }
 
-    public TipoLancamento getTipoLancamento() {
-        return tipoLancamento;
+    public TipoLancamento getTipo() {
+        return tipo;
     }
 
-    public void setTipoLancamento(TipoLancamento tipoLancamento) {
-        this.tipoLancamento = tipoLancamento;
+    public void setTipo(TipoLancamento tipo) {
+        this.tipo = tipo;
     }
 
     public StatusLancamento getStatusLancamento() {

@@ -14,8 +14,7 @@ public class UsuarioDTO implements Serializable {
     @NotEmpty(message = "Esse valor é obrigatório")
     private String senha;
 
-    public UsuarioDTO() {
-    }
+    public UsuarioDTO() { }
 
     public UsuarioDTO(String nome, String email, String senha) {
         this.nome = nome;

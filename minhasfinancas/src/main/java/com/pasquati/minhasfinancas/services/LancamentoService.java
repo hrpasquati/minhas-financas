@@ -2,8 +2,10 @@ package com.pasquati.minhasfinancas.services;
 
 import com.pasquati.minhasfinancas.DTO.LancamentoDTO;
 import com.pasquati.minhasfinancas.model.entity.Lancamento;
+import com.pasquati.minhasfinancas.model.entity.Usuario;
 import com.pasquati.minhasfinancas.model.enums.StatusLancamento;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,4 +26,7 @@ public interface LancamentoService {
     Lancamento fromDTO(LancamentoDTO lancamentoDTO);
 
     Optional<Lancamento> findById(Long id);
+
+    BigDecimal obterSaldoPorUsuario(Long id);
+
 }
